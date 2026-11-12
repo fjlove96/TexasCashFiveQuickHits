@@ -304,10 +304,14 @@ class CashFiveViewModel(application: Application) : AndroidViewModel(application
         _uiState.update { it.copy(showFavoritesDialog = false) }
     }
 
-    fun triggerCloudflareSync() {
+    fun triggerCloudflareSync(workerUrl: String = "https://texas-cash-five-worker.workers.dev/cashfive.csv") {
         _uiState.update { it.copy(cloudSyncStatus = "Syncing latest drawings with Cloudflare Worker...") }
-        loadData(getApplication())
-        _uiState.update { it.copy(cloudSyncStatus = "Cloudflare Sync Complete! Latest drawings updated.") }
+        HistoricalDrawRepository.syncWithCloudflareWorker(getApplication(), workerUrl) { success, message ->
+            if (success) {
+                loadData(getApplication())
+            }
+            _uiState.update { it.copy(cloudSyncStatus = message) }
+        }
     }
 
     fun selectTab(tab: Int) {

@@ -49,8 +49,13 @@ object HistoricalDrawRepository {
         cachedDraws?.let { return it }
         val draws = mutableListOf<HistoricalDraw>()
         try {
-            val inputStream = context.assets.open("cashfive.csv")
-            val reader = BufferedReader(InputStreamReader(inputStream))
+            val syncedFile = java.io.File(context.filesDir, "synced_cashfive.csv")
+            val reader = if (syncedFile.exists()) {
+                BufferedReader(InputStreamReader(syncedFile.inputStream()))
+            } else {
+                BufferedReader(InputStreamReader(context.assets.open("cashfive.csv")))
+            }
+
             reader.forEachLine { line ->
                 val parts = line.split(",")
                 if (parts.size >= 9) {
@@ -77,6 +82,40 @@ object HistoricalDrawRepository {
         }
         cachedDraws = draws.sortedByDescending { it.timeInMillis }
         return cachedDraws!!
+    }
+
+    fun syncWithCloudflareWorker(context: Context, workerUrl: String = "https://texas-cash-five-worker.workers.dev/cashfive.csv", onComplete: (Boolean, String) -> Unit) {
+        Thread {
+            try {
+                val url = java.net.URL(workerUrl)
+                val connection = url.openConnection() as java.net.HttpURLConnection
+                connection.connectTimeout = 10000
+                connection.readTimeout = 10000
+                connection.requestMethod = "GET"
+
+                if (connection.responseCode == java.net.HttpURLConnection.HTTP_OK) {
+                    val inputStream = connection.inputStream
+                    val reader = BufferedReader(InputStreamReader(inputStream))
+                    val content = StringBuilder()
+                    reader.forEachLine { content.append(it).append("\n") }
+                    reader.close()
+
+                    val csvText = content.toString()
+                    if (csvText.contains("1995") || csvText.contains(",")) {
+                        val file = java.io.File(context.filesDir, "synced_cashfive.csv")
+                        file.writeText(csvText)
+                        cachedDraws = null
+                        onComplete(true, "Cloudflare Sync Complete! Latest drawings updated.")
+                    } else {
+                        onComplete(false, "Invalid CSV data received from Cloudflare Worker.")
+                    }
+                } else {
+                    onComplete(false, "Server error: ${connection.responseCode}")
+                }
+            } catch (e: Exception) {
+                onComplete(false, "Sync failed: ${e.localizedMessage ?: "Network error"}")
+            }
+        }.start()
     }
 
     fun getDrawGaps(allDraws: List<HistoricalDraw>): Map<Int, Int> {
