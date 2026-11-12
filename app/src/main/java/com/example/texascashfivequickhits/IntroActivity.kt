@@ -53,6 +53,8 @@ class IntroActivity : ComponentActivity() {
                         AndroidView(
                             factory = { context ->
                                 VideoView(context).apply {
+                                    scaleX = 1.25f
+                                    scaleY = 1.25f
                                     val videoUri = Uri.parse("android.resource://${packageName}/${R.raw.intro_video}")
                                     setVideoURI(videoUri)
                                     setOnCompletionListener {
