@@ -146,6 +146,7 @@ class CashFiveViewModel(application: Application) : AndroidViewModel(application
         }
         loadData(application)
         checkDrawBreak()
+        triggerCloudflareSync()
     }
 
     private fun loadData(context: android.content.Context) {
