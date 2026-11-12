@@ -1,7 +1,18 @@
 export default {
   async fetch(request, env, ctx) {
+    // POST endpoint to update CSV from GitHub Action securely
+    if (request.method === "POST") {
+      const authHeader = request.headers.get("Authorization");
+      if (!env.WORKER_SECRET || authHeader !== `Bearer ${env.WORKER_SECRET}`) {
+        return new Response("Unauthorized", { status: 401 });
+      }
+      const csvText = await request.text();
+      await env.CASHFIVE_BUCKET.put("cashfive.csv", csvText);
+      return new Response("CSV successfully updated in R2!", { status: 200 });
+    }
+
+    // GET endpoint to serve CSV to the Android app
     try {
-      // Reads cashfive.csv directly from the bound Cloudflare R2 bucket
       const object = await env.CASHFIVE_BUCKET.get("cashfive.csv");
       if (object === null) {
         return new Response("CSV not found in R2 bucket", { status: 404 });
