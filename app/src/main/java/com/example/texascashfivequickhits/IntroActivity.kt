@@ -42,11 +42,11 @@ class IntroActivity : ComponentActivity() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Top portion: Video Player filling upper portion
+                    // Top portion: Video Player
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(0.72f)
+                            .weight(0.65f)
                             .background(Color.Black),
                         contentAlignment = Alignment.Center
                     ) {
@@ -71,35 +71,36 @@ class IntroActivity : ComponentActivity() {
                         )
                     }
 
-                    // Bottom portion: Branding
+                    // Bottom portion: Larger prominent branding
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(0.28f)
-                            .padding(bottom = 12.dp),
+                            .weight(0.35f)
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
                             text = "TX CASH 5 SMART PICKS",
-                            fontSize = 18.sp,
+                            fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             color = CyberGold,
-                            letterSpacing = 1.5.sp,
+                            letterSpacing = 2.sp,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = "Based on Texas Cash 5 Lotto Numbers · Analyzing 31 Years of Data!",
-                            fontSize = 12.sp,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold,
                             color = CyberCyan,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = "Not affiliated with or endorsed by the Texas Lottery Commission",
-                            fontSize = 9.sp,
-                            color = Color.Gray,
+                            fontSize = 10.sp,
+                            color = Color.LightGray,
                             textAlign = TextAlign.Center
                         )
                     }
