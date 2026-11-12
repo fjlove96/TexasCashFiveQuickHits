@@ -82,6 +82,21 @@ class IntroActivity : ComponentActivity() {
                             letterSpacing = 4.sp,
                             textAlign = TextAlign.Center
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Based on Texas Cash 5 Lotto Numbers",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "Analyzing 31 Years of Data!",
+                            fontSize = 11.sp,
+                            color = CyberCyan,
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
             }
