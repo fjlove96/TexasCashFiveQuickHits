@@ -2,8 +2,8 @@ export default {
   async fetch(request, env, ctx) {
     // POST endpoint to update CSV from GitHub Action securely
     if (request.method === "POST") {
-      const authHeader = request.headers.get("Authorization");
-      if (!env.WORKER_SECRET || authHeader !== `Bearer ${env.WORKER_SECRET}`) {
+      const secretHeader = request.headers.get("X-Webhook-Secret");
+      if (!env.WEBHOOK_SECRET || secretHeader !== env.WEBHOOK_SECRET) {
         return new Response("Unauthorized", { status: 401 });
       }
       const csvText = await request.text();

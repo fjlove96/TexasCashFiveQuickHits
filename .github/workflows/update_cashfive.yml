@@ -23,6 +23,11 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Run update script
         run: python update_cashfive.py
 
@@ -35,8 +40,8 @@ jobs:
 
       - name: Push CSV to Cloudflare Worker
         env:
-          WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
+          WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
         run: |
           curl -X POST "https://crimson-water-8a64.restless-brook-5368.workers.dev/" \
-               -H "Authorization: Bearer $WORKER_SECRET" \
+               -H "X-Webhook-Secret: $WEBHOOK_SECRET" \
                --data-binary @cashfive.csv
