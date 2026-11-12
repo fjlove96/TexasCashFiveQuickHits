@@ -1,0 +1,5 @@
+- `[ ]` Setup Jetpack Compose dependencies in build.gradle.kts
+- `[ ]` Implement `LotteryNumberGenerator` logic and unit tests
+- `[ ]` Implement `CashFiveViewModel` for state management
+- `[ ]` Implement Material 3 UI (`CashFiveScreen` and `MainActivity`)
+- `[ ]` Run build and verify tests
