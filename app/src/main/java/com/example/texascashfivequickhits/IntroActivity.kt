@@ -76,30 +76,48 @@ class IntroActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.35f)
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                            .padding(horizontal = 16.dp, vertical = 4.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "TX CASH 5 SMART PICKS",
+                            text = "TEXAS",
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = CyberGold,
+                            letterSpacing = 4.sp,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "CASH 5",
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             color = CyberGold,
-                            letterSpacing = 2.sp,
+                            letterSpacing = 4.sp,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Based on Texas Cash 5 Lotto Numbers · Analyzing 31 Years of Data!",
-                            fontSize = 13.sp,
+                            text = "SMART PICKS",
+                            fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
                             color = CyberCyan,
+                            letterSpacing = 3.sp,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Based on Texas Cash 5 Lotto Numbers · Analyzing 31 Years of Data!",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = "Not affiliated with or endorsed by the Texas Lottery Commission",
-                            fontSize = 10.sp,
+                            fontSize = 8.sp,
                             color = Color.LightGray,
                             textAlign = TextAlign.Center
                         )
