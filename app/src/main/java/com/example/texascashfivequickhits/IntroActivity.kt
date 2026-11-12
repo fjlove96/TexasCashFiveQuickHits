@@ -80,19 +80,19 @@ class IntroActivity : ComponentActivity() {
                     ) {
                         Text(
                             text = "TEXAS",
-                            fontSize = 28.sp,
+                            fontSize = 32.sp,
                             fontWeight = FontWeight.Bold,
                             color = CyberGold,
-                            letterSpacing = 4.sp,
+                            letterSpacing = 5.sp,
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = "CASH 5",
-                            fontSize = 24.sp,
+                            fontSize = 32.sp,
                             fontWeight = FontWeight.Bold,
                             color = CyberGold,
-                            letterSpacing = 4.sp,
+                            letterSpacing = 5.sp,
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.height(4.dp))
