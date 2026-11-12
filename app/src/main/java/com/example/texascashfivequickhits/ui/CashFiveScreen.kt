@@ -1394,6 +1394,23 @@ fun AboutTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
                 }
             }
         }
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = CyberSurface)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Official Disclaimer", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = CyberGold)
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        "This app is an independent analysis tool and is not officially affiliated with, endorsed by, or connected to the Texas Lottery Commission. Winning numbers should always be verified through official Texas Lottery channels before discarding tickets.",
+                        fontSize = 12.sp,
+                        color = CyberTextSecondary,
+                        lineHeight = 16.sp
+                    )
+                }
+            }
+        }
     }
 }
 

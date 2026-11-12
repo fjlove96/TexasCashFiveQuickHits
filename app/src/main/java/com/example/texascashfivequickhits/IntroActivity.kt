@@ -93,6 +93,13 @@ class IntroActivity : ComponentActivity() {
                             color = CyberCyan,
                             textAlign = TextAlign.Center
                         )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "Not affiliated with or endorsed by the Texas Lottery Commission",
+                            fontSize = 8.sp,
+                            color = Color.Gray,
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
             }
