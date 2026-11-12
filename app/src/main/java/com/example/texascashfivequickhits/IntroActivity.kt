@@ -42,11 +42,23 @@ class IntroActivity : ComponentActivity() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    // Video Player
+                    // TEXAS above video
+                    Text(
+                        text = "TEXAS",
+                        fontSize = 40.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = CyberGold,
+                        letterSpacing = 5.sp,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    // Video Player in middle
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(340.dp)
+                            .height(260.dp)
                             .background(Color.Black),
                         contentAlignment = Alignment.Center
                     ) {
@@ -71,25 +83,16 @@ class IntroActivity : ComponentActivity() {
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                    // Branding directly below video, centered
+                    // CASH 5, SMART PICKS, and rest below video
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "TEXAS",
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = CyberGold,
-                            letterSpacing = 5.sp,
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
                             text = "CASH 5",
-                            fontSize = 32.sp,
+                            fontSize = 55.sp,
                             fontWeight = FontWeight.Bold,
                             color = CyberGold,
                             letterSpacing = 5.sp,
@@ -98,16 +101,16 @@ class IntroActivity : ComponentActivity() {
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "SMART PICKS",
-                            fontSize = 15.sp,
+                            fontSize = 26.sp,
                             fontWeight = FontWeight.Bold,
                             color = CyberCyan,
                             letterSpacing = 3.sp,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Based on Texas Cash 5 Lotto Numbers · Analyzing 31 Years of Data!",
-                            fontSize = 11.sp,
+                            fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
                             textAlign = TextAlign.Center
@@ -115,7 +118,7 @@ class IntroActivity : ComponentActivity() {
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "Not affiliated with or endorsed by the Texas Lottery Commission",
-                            fontSize = 8.sp,
+                            fontSize = 9.sp,
                             color = Color.LightGray,
                             textAlign = TextAlign.Center
                         )
