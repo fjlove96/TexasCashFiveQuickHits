@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,36 +36,49 @@ class IntroActivity : ComponentActivity() {
 
         setContent {
             TexasCashFiveQuickHitsTheme {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.Black)
+                        .padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    AndroidView(
-                        factory = { context ->
-                            VideoView(context).apply {
-                                val videoUri = Uri.parse("android.resource://${packageName}/${R.raw.intro_video}")
-                                setVideoURI(videoUri)
-                                setOnCompletionListener {
-                                    navigateToMain()
+                    // Top portion: Video Player
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.75f)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.Black),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        AndroidView(
+                            factory = { context ->
+                                VideoView(context).apply {
+                                    val videoUri = Uri.parse("android.resource://${packageName}/${R.raw.intro_video}")
+                                    setVideoURI(videoUri)
+                                    setOnCompletionListener {
+                                        navigateToMain()
+                                    }
+                                    setOnErrorListener { _, _, _ ->
+                                        navigateToMain()
+                                        true
+                                    }
+                                    start()
                                 }
-                                setOnErrorListener { _, _, _ ->
-                                    navigateToMain()
-                                    true
-                                }
-                                start()
-                            }
-                        },
-                        modifier = Modifier.fillMaxSize()
-                    )
+                            },
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
 
-                    // Title at bottom of launch screen (Matching TX Lotto)
+                    // Bottom portion: Branding and text matching Texas Lotto
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 48.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .weight(0.42f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
                         Text(
                             text = "TX CASH 5",
@@ -82,7 +97,7 @@ class IntroActivity : ComponentActivity() {
                             letterSpacing = 4.sp,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
                         Text(
                             text = "Based on Texas Cash 5 Lotto Numbers",
                             fontSize = 12.sp,
@@ -90,7 +105,7 @@ class IntroActivity : ComponentActivity() {
                             color = Color.White,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(2.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "Analyzing 31 Years of Data!",
                             fontSize = 11.sp,
