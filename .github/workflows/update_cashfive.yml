@@ -2,10 +2,10 @@ name: Update Texas Cash 5 CSV
 
 on:
   schedule:
-    - cron: '42 3 * * 2-7' # 30 mins after 10:12 PM CT draw (CDT)
-    - cron: '12 4 * * 2-7' # 60 mins after draw (CDT) / 30 mins after (CST)
-    - cron: '42 4 * * 2-7' # 30 mins after draw (CST)
-    - cron: '12 5 * * 2-7' # 60 mins after draw (CST)
+    - cron: '42 3 * * *' # 30 mins after 10:12 PM CT draw (CDT)
+    - cron: '12 4 * * *' # 60 mins after draw (CDT) / 30 mins after (CST)
+    - cron: '42 4 * * *' # 30 mins after draw (CST)
+    - cron: '12 5 * * *' # 60 mins after draw (CST)
   workflow_dispatch:
 
 jobs:
