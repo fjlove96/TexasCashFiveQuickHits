@@ -1,6 +1,7 @@
 package com.example.texascashfivequickhits.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,6 +32,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Dialog
 import com.example.texascashfivequickhits.model.PickStrategy
 import com.example.texascashfivequickhits.model.TimePeriod
@@ -279,7 +282,14 @@ fun HomeTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("🎯", fontSize = 24.sp)
+                        Image(
+                            painter = painterResource(id = com.example.texascashfivequickhits.R.drawable.smart_pick_target),
+                            contentDescription = "Smart Pick Generator",
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
                             Text("Smart Pick Generator", fontWeight = FontWeight.Bold, color = CyberGold, fontSize = 16.sp)
