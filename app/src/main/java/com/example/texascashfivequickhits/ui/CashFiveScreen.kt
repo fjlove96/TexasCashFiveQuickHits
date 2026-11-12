@@ -1,5 +1,6 @@
 package com.example.texascashfivequickhits.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -47,6 +48,18 @@ fun CashFiveScreen(
     viewModel: CashFiveViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    BackHandler(
+        enabled = uiState.showFavoritesDialog || uiState.showAddDrawDialog || uiState.showDailyDrawingsPage || uiState.showGeneratorPage || uiState.selectedTab != 0
+    ) {
+        when {
+            uiState.showFavoritesDialog -> viewModel.closeFavoritesDialog()
+            uiState.showAddDrawDialog -> viewModel.closeAddDrawDialog()
+            uiState.showDailyDrawingsPage -> viewModel.closeDailyDrawingsPage()
+            uiState.showGeneratorPage -> viewModel.closeGeneratorPage()
+            uiState.selectedTab != 0 -> viewModel.selectTab(0)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -269,7 +282,7 @@ fun HomeTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
                         Text("🎯", fontSize = 24.sp)
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
-                            Text("Open Custom Pick Generator", fontWeight = FontWeight.Bold, color = CyberGold, fontSize = 16.sp)
+                            Text("Smart Pick Generator", fontWeight = FontWeight.Bold, color = CyberGold, fontSize = 16.sp)
                             Text("Pick numbers using 4-factor smart algorithm", fontSize = 12.sp, color = CyberTextSecondary)
                         }
                     }
