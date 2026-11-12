@@ -38,7 +38,9 @@ jobs:
           git add cashfive.csv
           git diff --staged --quiet || (git commit -m "Auto-update Cash 5 CSV with latest draw" && git push origin main)
 
-      - name: Push CSV to Cloudflare Worker
+      - name: Upload to Cloudflare R2
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          curl -f -X POST "https://crimson-water-8a64.restless-brook-5368.workers.dev/" \
-               --data-binary @cashfive.csv
+          npx wrangler r2 object put texas-cash-five/cashfive.csv --file=cashfive.csv
