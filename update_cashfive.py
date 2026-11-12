@@ -1,84 +1,86 @@
 import os
-import csv
-import urllib.request
+import re
+import requests
+from bs4 import BeautifulSoup
 
-CSV_PATH = "cashfive.csv"
-TEXAS_LOTTERY_CSV_URL = "https://www.texaslottery.com/export/sites/lottery/Games/Cash_Five/Winning_Numbers/cashfive.csv"
+CSV_FILE = "cashfive.csv"
 
-def update_csv():
-    print("Fetching latest Texas Cash 5 CSV from official Texas Lottery source...")
+def fetch_latest_draws():
+    url = "https://www.texaslottery.com/export/sites/lottery/Games/Cash_Five/Winning_Numbers/index.html"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+
     try:
-        req = urllib.request.Request(
-            TEXAS_LOTTERY_CSV_URL,
-            headers={'User-Agent': 'Mozilla/5.0'}
-        )
-        with urllib.request.urlopen(req) as response:
-            remote_data = response.read().decode('utf-8').splitlines()
+        response = requests.get(url, headers=headers, timeout=15)
+        response.raise_for_status()
     except Exception as e:
-        print(f"Failed to fetch remote CSV: {e}")
+        print(f"Error fetching Texas Lottery web page: {e}")
+        return []
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    rows = soup.find_all("tr")
+    new_entries = []
+
+    for row in rows:
+        cols = row.find_all(['td', 'th'])
+        if len(cols) < 2:
+            continue
+
+        row_text = row.get_text()
+        date_match = re.search(r'(\d{1,2})/(\d{1,2})/(\d{4})', row_text)
+        if not date_match:
+            continue
+
+        m, d, y = int(date_match.group(1)), int(date_match.group(2)), int(date_match.group(3))
+
+        # Extract numbers specifically from the table columns after the date column (Cash 5 numbers are 1-35)
+        numbers = []
+        for col in cols[1:]:
+            found = re.findall(r'\b([1-9]|[1-2][0-9]|3[0-5])\b', col.get_text())
+            for f in found:
+                val = int(f)
+                if val <= 35 and val != m and val != d and val != y and val != (y % 100):
+                    numbers.append(val)
+
+        if len(numbers) >= 5:
+            nums = numbers[:5]
+            new_entries.append(((y, m, d), f"Cash Five,{m},{d},{y}," + ",".join(str(n) for n in nums)))
+
+    return new_entries
+
+def main():
+    fetched = fetch_latest_draws()
+    if not fetched:
+        print("No draws fetched.")
         return
 
-    # Parse remote draws
-    remote_draws = {}
-    for line in remote_data:
-        parts = line.split(',')
-        if len(parts) >= 9 and "Cash Five" in parts[0]:
+    fetched.sort(key=lambda item: item[0])
+
+    valid_lines = []
+    if os.path.exists(CSV_FILE):
+        with open(CSV_FILE, "r", encoding="utf-8") as f:
+            for line in f:
+                valid_lines.append(line.strip())
+
+    existing_valid = set()
+    for line in valid_lines:
+        parts = line.split(",")
+        if len(parts) >= 9:
             try:
-                m = int(parts[1].strip())
-                d = int(parts[2].strip())
-                y = int(parts[3].strip())
-                n1 = int(parts[4].strip())
-                n2 = int(parts[5].strip())
-                n3 = int(parts[6].strip())
-                n4 = int(parts[7].strip())
-                n5 = int(parts[8].strip())
-                remote_draws[(m, d, y)] = (n1, n2, n3, n4, n5)
+                existing_valid.add((int(parts[3]), int(parts[1]), int(parts[2])))
             except ValueError:
-                continue
+                pass
 
-    # Parse local draws
-    local_draws = {}
-    if os.path.exists(CSV_PATH):
-        with open(CSV_PATH, mode='r', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                if len(row) >= 9 and "Cash Five" in row[0]:
-                    try:
-                        m = int(row[1].strip())
-                        d = int(row[2].strip())
-                        y = int(row[3].strip())
-                        n1 = int(row[4].strip())
-                        n2 = int(row[5].strip())
-                        n3 = int(row[6].strip())
-                        n4 = int(row[7].strip())
-                        n5 = int(row[8].strip())
-                        local_draws[(m, d, y)] = (n1, n2, n3, n4, n5)
-                    except ValueError:
-                        continue
+    added_count = 0
+    with open(CSV_FILE, "w", encoding="utf-8") as f:
+        for line in valid_lines:
+            f.write(line + "\n")
+        for date_tuple, csv_line in fetched:
+            if date_tuple not in existing_valid:
+                f.write(csv_line + "\n")
+                print(f"Added new draw: {csv_line}")
+                added_count += 1
 
-    # Find new draws
-    new_draws = []
-    for date_key, nums in remote_draws.items():
-        if date_key not in local_draws:
-            new_draws.append((date_key, nums))
-
-    if not new_draws:
-        print("CSV is already up to date. No new draws found.")
-        return
-
-    print(f"Found {len(new_draws)} new draws!")
-
-    # Combine all draws and sort by date descending
-    all_draws = {**local_draws, **remote_draws}
-    sorted_draws = sorted(all_draws.items(), key=lambda x: (x[0][2], x[0][0], x[0][1]), reverse=True)
-
-    # Write back to cashfive.csv
-    with open(CSV_PATH, mode='w', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f)
-        for (m, d, y), (n1, n2, n3, n4, n5) in sorted_draws:
-            writer.writerow(["Cash Five", m, d, y, n1, n2, n3, n4, n5])
-
-    print(f"Successfully updated {CSV_PATH} with {len(new_draws)} new draws.")
+    print(f"Sync finished. Added {added_count} new draws.")
 
 if __name__ == "__main__":
-    update_csv()
+    main()

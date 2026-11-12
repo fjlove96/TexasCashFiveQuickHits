@@ -13,9 +13,9 @@ permissions:
 
 jobs:
   update-csv:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout repository
+      - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -23,17 +23,25 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Run update script
-        run: python update_cashfive.py
-
-      - name: Commit and push if changes
+      - name: Install Dependencies
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Run Fetch Script
+        run: |
+          python update_cashfive.py
+
+      - name: Commit and Push Updated CSV
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add cashfive.csv
-          git diff --staged --quiet || (git commit -m "Auto-update Cash 5 CSV with latest draw" && git push origin main)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update Texas Cash 5 draws" && git push)
 
-      - name: Push CSV to Cloudflare Worker
+      - name: Upload updated CSV to Cloudflare R2
         run: |
-          curl -f -X POST "https://cash5.quickhitsapps.com/" \
-               --data-binary @cashfive.csv
+          pip install awscli
+          aws configure set aws_access_key_id ${{ secrets.R2_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          aws s3 cp cashfive.csv s3://texas-cash-five/cashfive.csv --endpoint-url ${{ secrets.R2_ENDPOINT }}
