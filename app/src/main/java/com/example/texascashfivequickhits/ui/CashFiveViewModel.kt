@@ -468,4 +468,12 @@ class CashFiveViewModel(application: Application) : AndroidViewModel(application
         val isBreak = (hour == 22 && minute in 2..15)
         _uiState.update { it.copy(isDrawBreak = isBreak) }
     }
+
+    fun getNumberStats(number: Int): Triple<Int, Int, List<HistoricalDraw>> {
+        val freqs = HistoricalDrawRepository.getNumberFrequencies(allDraws)
+        val freq = freqs[number] ?: 0
+        val gap = drawGapsMap[number] ?: allDraws.size
+        val recentDrawsWithNumber = allDraws.filter { it.numbers.contains(number) }.take(15)
+        return Triple(freq, gap, recentDrawsWithNumber)
+    }
 }

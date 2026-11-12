@@ -104,8 +104,8 @@ fun CashFiveScreen(
                 NavigationBarItem(
                     selected = uiState.selectedTab == 1,
                     onClick = { viewModel.selectTab(1) },
-                    icon = { Icon(Icons.Default.Star, contentDescription = "Generator") },
-                    label = { Text("Generator", color = if (uiState.selectedTab == 1) CyberCyan else CyberTextSecondary) },
+                    icon = { Icon(Icons.Default.Search, contentDescription = "Analysis") },
+                    label = { Text("Analysis", color = if (uiState.selectedTab == 1) CyberCyan else CyberTextSecondary) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = CyberCyan,
                         unselectedIconColor = CyberTextSecondary,
@@ -148,7 +148,7 @@ fun CashFiveScreen(
             } else {
                 when (uiState.selectedTab) {
                     0 -> HomeTab(uiState, viewModel)
-                    1 -> GeneratorTab(uiState, viewModel)
+                    1 -> AnalysisTab(uiState, viewModel)
                     2 -> HistoryTab(uiState, viewModel)
                     3 -> AboutTab(uiState, viewModel)
                 }
@@ -879,7 +879,7 @@ fun TierPillBoxSection(title: String, tierColor: Color, items: List<Pair<Int, St
 }
 
 @Composable
-fun PillBoxWinningNumbers(numbers: List<Int>) {
+fun PillBoxWinningNumbers(numbers: List<Int>, highlightNumber: Int = -1) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -894,9 +894,29 @@ fun PillBoxWinningNumbers(numbers: List<Int>) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             for (num in numbers) {
-                SmallHitBall(number = num.toString(), isGreyedOut = false)
+                val isHighlighted = num == highlightNumber
+                SmallHitBallHighlighted(number = num.toString(), isHighlighted = isHighlighted)
             }
         }
+    }
+}
+
+@Composable
+fun SmallHitBallHighlighted(number: String, isHighlighted: Boolean = false) {
+    Box(
+        modifier = Modifier
+            .size(34.dp)
+            .aspectRatio(1f)
+            .clip(CircleShape)
+            .background(if (isHighlighted) CyberGold else CyberGreen),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = number,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
     }
 }
 
@@ -1375,8 +1395,143 @@ fun GeneratedBall(
 }
 
 @Composable
-fun GeneratorTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
-    GeneratorPageModal(uiState, viewModel)
+fun AnalysisTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
+    var selectedNumber by remember { mutableStateOf(1) }
+    val (hits, gap, recentDraws) = remember(selectedNumber, uiState.historicalDrawsCount) {
+        viewModel.getNumberStats(selectedNumber)
+    }
+    val totalDraws = uiState.historicalDrawsCount.coerceAtLeast(1)
+    val hitRatePercent = ((hits.toFloat() / totalDraws.toFloat()) * 100).toInt()
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        item {
+            Text("Number Hit Analysis (1–35)", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = CyberGold)
+            Text("Select any number to inspect its complete historical performance.", fontSize = 12.sp, color = CyberTextSecondary)
+        }
+
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = CyberSurface)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Select Number: #$selectedNumber", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = CyberText)
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    for (row in 0 until 5) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            for (col in 1..7) {
+                                val num = row * 7 + col
+                                val isSelected = num == selectedNumber
+                                Box(
+                                    modifier = Modifier
+                                        .size(38.dp)
+                                        .aspectRatio(1f)
+                                        .clip(CircleShape)
+                                        .background(if (isSelected) CyberGold else CyberBackground)
+                                        .border(1.dp, if (isSelected) CyberGold else CyberTextSecondary.copy(alpha = 0.3f), CircleShape)
+                                        .clickable { selectedNumber = num },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = num.toString(),
+                                        fontWeight = FontWeight.Bold,
+                                        color = if (isSelected) Color.Black else CyberText,
+                                        fontSize = 14.sp
+                                    )
+                                }
+                            }
+                        }
+                        if (row < 4) Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            }
+        }
+
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = CyberSurface)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text("Number #$selectedNumber Statistics", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = CyberGold)
+                            Text("Total Dataset: $totalDraws draws", fontSize = 11.sp, color = CyberTextSecondary)
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clip(CircleShape)
+                                .background(CyberCyan),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("#$selectedNumber", fontWeight = FontWeight.Bold, color = Color.Black, fontSize = 15.sp)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        StatBox("Total Hits", "$hits times", CyberCyan)
+                        StatBox("Hit Rate", "$hitRatePercent%", CyberGreen)
+                        StatBox("Overdue Gap", "$gap draws ago", CyberGold)
+                    }
+                }
+            }
+        }
+
+        item {
+            Text("Recent Draws Containing #$selectedNumber", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = CyberText)
+        }
+
+        items(recentDraws, key = { "num-$selectedNumber-${it.year}-${it.month}-${it.day}" }) { draw ->
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = CyberSurface)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(14.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(draw.dateString, fontWeight = FontWeight.Bold, color = CyberCyan, fontSize = 14.sp)
+                        Text("Historical Draw Result", fontSize = 11.sp, color = CyberTextSecondary)
+                    }
+                    PillBoxWinningNumbers(numbers = draw.numbers, highlightNumber = selectedNumber)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun StatBox(label: String, value: String, color: Color) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = CyberBackground),
+        modifier = Modifier.width(100.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(label, fontSize = 10.sp, color = CyberTextSecondary, textAlign = TextAlign.Center)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(value, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = color, textAlign = TextAlign.Center)
+        }
+    }
 }
 
 @Composable
