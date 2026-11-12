@@ -2,8 +2,10 @@ name: Update Texas Cash 5 CSV
 
 on:
   schedule:
-    - cron: '0 5 * * *' # Daily at 5:00 AM UTC (Early morning check)
-    - cron: '0 14 * * *' # Daily at 2:00 PM UTC (Midday check in case site is slow to update)
+    - cron: '42 3 * * 2-7' # 30 mins after 10:12 PM CT draw (CDT)
+    - cron: '12 4 * * 2-7' # 60 mins after draw (CDT) / 30 mins after (CST)
+    - cron: '42 4 * * 2-7' # 30 mins after draw (CST)
+    - cron: '12 5 * * 2-7' # 60 mins after draw (CST)
   workflow_dispatch:
 
 jobs:
