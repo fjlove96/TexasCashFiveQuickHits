@@ -45,7 +45,7 @@ class IntroActivity : ComponentActivity() {
                     // TEXAS above video
                     Text(
                         text = "TEXAS",
-                        fontSize = 40.sp,
+                        fontSize = 50.sp,
                         fontWeight = FontWeight.Bold,
                         color = CyberGold,
                         letterSpacing = 5.sp,
