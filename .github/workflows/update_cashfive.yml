@@ -8,6 +8,9 @@ on:
     - cron: '12 5 * * *' # 60 mins after draw (CST)
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   update-csv:
     runs-on: ubuntu-latest
@@ -33,11 +36,11 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add cashfive.csv
-          git diff --staged --quiet || (git commit -m "Auto-update Cash 5 CSV with latest draw" && git push)
+          git diff --staged --quiet || (git commit -m "Auto-update Cash 5 CSV with latest draw" && git push origin main)
 
       - name: Upload CSV to Cloudflare R2
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          npx wrangler r2 object put texas-cash-five-bucket/cashfive.csv --file=cashfive.csv || echo "R2 upload skipped or failed"
+          npx wrangler r2 object put texas-cash-five/cashfive.csv --file=cashfive.csv || echo "R2 upload skipped or failed"
