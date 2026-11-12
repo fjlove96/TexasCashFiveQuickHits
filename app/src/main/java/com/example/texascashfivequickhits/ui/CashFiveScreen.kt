@@ -1380,7 +1380,8 @@ fun AboutTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            Text("About Texas Cash Five Smart Picks", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = CyberText)
+            Text("About Texas Cash Five", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = CyberGold)
+            Text("Version 1.0.0 · Quick Hits Apps", fontSize = 12.sp, color = CyberTextSecondary)
         }
         item {
             Card(
@@ -1388,9 +1389,36 @@ fun AboutTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
                 colors = CardDefaults.cardColors(containerColor = CyberSurface)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Part of the Quick Hits Apps portfolio.", fontSize = 14.sp, color = CyberText)
+                    Text("Smart Algorithm & Analysis", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = CyberCyan)
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        "Texas Cash Five Quick Hits uses a 4-factor historical analysis engine (frequency analysis, overdue gap tracking, tier balancing, and hot/cold number weighting) across 31 years of official Texas Lottery drawings (1995–2026).",
+                        fontSize = 13.sp,
+                        color = CyberText,
+                        lineHeight = 18.sp
+                    )
+                }
+            }
+        }
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = CyberSurface)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Cloud Sync & Database", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = CyberCyan)
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text("Database records: ${uiState.historicalDrawsCount} historical draws", fontSize = 13.sp, color = CyberText)
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text("Database: cashfive.csv (${uiState.historicalDrawsCount} historical records)", fontSize = 13.sp, color = CyberTextSecondary)
+                    Text("Status: ${uiState.cloudSyncStatus}", fontSize = 11.sp, color = CyberTextSecondary)
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Button(
+                        onClick = { viewModel.triggerCloudflareSync() },
+                        colors = ButtonDefaults.buttonColors(containerColor = CyberBackground),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Sync Latest Cloud Results", color = CyberCyan, fontWeight = FontWeight.Bold)
+                    }
                 }
             }
         }
