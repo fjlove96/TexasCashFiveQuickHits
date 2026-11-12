@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,16 +38,15 @@ class IntroActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.Black)
-                        .padding(24.dp),
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Top portion: Video Player
+                    // Top portion: Video Player filling most of the screen
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(0.75f)
-                            .clip(RoundedCornerShape(16.dp))
+                            .weight(0.85f)
                             .background(Color.Black),
                         contentAlignment = Alignment.Center
                     ) {
@@ -72,43 +69,27 @@ class IntroActivity : ComponentActivity() {
                         )
                     }
 
-                    // Bottom portion: Branding and text matching Texas Lotto
+                    // Bottom portion: Compact branding
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(0.42f),
+                            .weight(0.15f)
+                            .padding(bottom = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "TX CASH 5",
-                            fontSize = 26.sp,
+                            text = "TX CASH 5 SMART PICKS",
+                            fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
                             color = CyberGold,
-                            letterSpacing = 2.sp,
+                            letterSpacing = 1.5.sp,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(2.dp))
                         Text(
-                            text = "SMART PICKS",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = CyberCyan,
-                            letterSpacing = 4.sp,
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "Based on Texas Cash 5 Lotto Numbers",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "Analyzing 31 Years of Data!",
-                            fontSize = 11.sp,
+                            text = "Based on Texas Cash 5 Lotto Numbers · Analyzing 31 Years of Data!",
+                            fontSize = 10.sp,
                             color = CyberCyan,
                             textAlign = TextAlign.Center
                         )
