@@ -1,50 +1,84 @@
 import os
 import csv
-from datetime import datetime
 import urllib.request
-import json
 
 CSV_PATH = "cashfive.csv"
-
-def get_existing_draws():
-    draws = set()
-    if not os.path.exists(CSV_PATH):
-        return draws
-
-    with open(CSV_PATH, mode='r', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if len(row) >= 4:
-                # row format: GameName, Month, Day, Year, N1, N2, N3, N4, N5
-                game = row[0].strip()
-                if "Cash Five" in game:
-                    try:
-                        m = int(row[1])
-                        d = int(row[2])
-                        y = int(row[3])
-                        draws.add((m, d, y))
-                    except ValueError:
-                        continue
-    return draws
+TEXAS_LOTTERY_CSV_URL = "https://www.texaslottery.com/export/sites/lottery/Games/Cash_Five/Winning_Numbers/cashfive.csv"
 
 def update_csv():
-    print("Checking for new Texas Cash 5 drawings...")
-    existing_draws = get_existing_draws()
-    print(f"Found {len(existing_draws)} existing draws in {CSV_PATH}.")
+    print("Fetching latest Texas Cash 5 CSV from official Texas Lottery source...")
+    try:
+        req = urllib.request.Request(
+            TEXAS_LOTTERY_CSV_URL,
+            headers={'User-Agent': 'Mozilla/5.0'}
+        )
+        with urllib.request.urlopen(req) as response:
+            remote_data = response.read().decode('utf-8').splitlines()
+    except Exception as e:
+        print(f"Failed to fetch remote CSV: {e}")
+        return
 
-    # TODO: Connect to Texas Lottery API or scrape latest draws
-    # Example structure for appending new draws:
-    # new_draws = [
-    #    ("Cash Five", month, day, year, n1, n2, n3, n4, n5)
-    # ]
+    # Parse remote draws
+    remote_draws = {}
+    for line in remote_data:
+        parts = line.split(',')
+        if len(parts) >= 9 and "Cash Five" in parts[0]:
+            try:
+                m = int(parts[1].strip())
+                d = int(parts[2].strip())
+                y = int(parts[3].strip())
+                n1 = int(parts[4].strip())
+                n2 = int(parts[5].strip())
+                n3 = int(parts[6].strip())
+                n4 = int(parts[7].strip())
+                n5 = int(parts[8].strip())
+                remote_draws[(m, d, y)] = (n1, n2, n3, n4, n5)
+            except ValueError:
+                continue
 
-    new_draws_added = 0
-    # for draw in new_draws:
-    #     if (draw[1], draw[2], draw[3]) not in existing_draws:
-    #         append to cashfive.csv
-    #         new_draws_added += 1
+    # Parse local draws
+    local_draws = {}
+    if os.path.exists(CSV_PATH):
+        with open(CSV_PATH, mode='r', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                if len(row) >= 9 and "Cash Five" in row[0]:
+                    try:
+                        m = int(row[1].strip())
+                        d = int(row[2].strip())
+                        y = int(row[3].strip())
+                        n1 = int(row[4].strip())
+                        n2 = int(row[5].strip())
+                        n3 = int(row[6].strip())
+                        n4 = int(row[7].strip())
+                        n5 = int(row[8].strip())
+                        local_draws[(m, d, y)] = (n1, n2, n3, n4, n5)
+                    except ValueError:
+                        continue
 
-    print(f"Update complete. Added {new_draws_added} new draws.")
+    # Find new draws
+    new_draws = []
+    for date_key, nums in remote_draws.items():
+        if date_key not in local_draws:
+            new_draws.append((date_key, nums))
+
+    if not new_draws:
+        print("CSV is already up to date. No new draws found.")
+        return
+
+    print(f"Found {len(new_draws)} new draws!")
+
+    # Combine all draws and sort by date descending
+    all_draws = {**local_draws, **remote_draws}
+    sorted_draws = sorted(all_draws.items(), key=lambda x: (x[0][2], x[0][0], x[0][1]), reverse=True)
+
+    # Write back to cashfive.csv
+    with open(CSV_PATH, mode='w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        for (m, d, y), (n1, n2, n3, n4, n5) in sorted_draws:
+            writer.writerow(["Cash Five", m, d, y, n1, n2, n3, n4, n5])
+
+    print(f"Successfully updated {CSV_PATH} with {len(new_draws)} new draws.")
 
 if __name__ == "__main__":
     update_csv()
