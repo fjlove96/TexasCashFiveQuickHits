@@ -444,8 +444,6 @@ class CashFiveViewModel(application: Application) : AndroidViewModel(application
         _uiState.update {
             it.copy(
                 savedTickets = updatedTickets,
-                showGeneratorPage = false,
-                selectedTab = 0,
                 currentNumbers = emptyList(),
                 hasGeneratedPick = false,
                 latestPickResult = null,
