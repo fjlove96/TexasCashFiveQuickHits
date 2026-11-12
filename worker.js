@@ -1,11 +1,7 @@
 export default {
   async fetch(request, env, ctx) {
-    // POST endpoint to update CSV from GitHub Action securely
+    // POST endpoint to update CSV from GitHub Action
     if (request.method === "POST") {
-      const secretHeader = request.headers.get("X-Webhook-Secret");
-      if (!env.WEBHOOK_SECRET || secretHeader !== env.WEBHOOK_SECRET) {
-        return new Response("Unauthorized", { status: 401 });
-      }
       const csvText = await request.text();
       await env.CASHFIVE_BUCKET.put("cashfive.csv", csvText);
       return new Response("CSV successfully updated in R2!", { status: 200 });

@@ -39,9 +39,6 @@ jobs:
           git diff --staged --quiet || (git commit -m "Auto-update Cash 5 CSV with latest draw" && git push origin main)
 
       - name: Push CSV to Cloudflare Worker
-        env:
-          WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
         run: |
           curl -f -X POST "https://crimson-water-8a64.restless-brook-5368.workers.dev/" \
-               -H "X-Webhook-Secret: $WEBHOOK_SECRET" \
                --data-binary @cashfive.csv
