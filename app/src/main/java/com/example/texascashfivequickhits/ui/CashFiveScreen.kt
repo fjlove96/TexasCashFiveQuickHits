@@ -1,12 +1,14 @@
 package com.example.texascashfivequickhits.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -166,6 +168,65 @@ fun CashFiveScreen(
 
             if (uiState.showFavoritesDialog) {
                 FavoritesDialog(uiState, viewModel)
+            }
+
+            if (uiState.showTermsDialog) {
+                TermsOfUseDialog(uiState, viewModel)
+            }
+        }
+    }
+}
+
+@Composable
+fun TermsOfUseDialog(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
+    Dialog(onDismissRequest = { /* Non-dismissible without accepting */ }) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .heightIn(max = 550.dp),
+            colors = CardDefaults.cardColors(containerColor = CyberSurface),
+            border = BorderStroke(1.dp, CyberGold)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Welcome to Texas Cash Five Quick Hits", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = CyberGold, textAlign = TextAlign.Center)
+                Spacer(modifier = Modifier.height(6.dp))
+                Text("Please review and agree to the Terms of Use before proceeding.", fontSize = 12.sp, color = CyberTextSecondary, textAlign = TextAlign.Center)
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text("1. For Entertainment & Informational Use Only", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = CyberCyan)
+                Spacer(modifier = Modifier.height(2.dp))
+                Text("Texas Cash Five Quick Hits is created solely for statistical exploration, educational, and entertainment purposes.", fontSize = 12.sp, color = CyberTextSecondary, lineHeight = 16.sp)
+
+                Spacer(modifier = Modifier.height(10.dp))
+                Text("2. No Guarantee of Winnings or Odds Alteration", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = CyberCyan)
+                Spacer(modifier = Modifier.height(2.dp))
+                Text("Historical draw frequency describes past drawings only; it does not predict future outcomes or alter lottery odds.", fontSize = 12.sp, color = CyberTextSecondary, lineHeight = 16.sp)
+
+                Spacer(modifier = Modifier.height(10.dp))
+                Text("3. Limitation of Liability & Waiver", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = CyberCyan)
+                Spacer(modifier = Modifier.height(2.dp))
+                Text("You are solely responsible for any lottery purchases you make. The developers assume no liability for any financial losses.", fontSize = 12.sp, color = CyberTextSecondary, lineHeight = 16.sp)
+
+                Spacer(modifier = Modifier.height(10.dp))
+                Text("4. Unofficial & Non-Affiliated", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = CyberCyan)
+                Spacer(modifier = Modifier.height(2.dp))
+                Text("Texas Cash Five Quick Hits is an independent app and is not affiliated with the Texas Lottery Commission or any official lottery entity.", fontSize = 12.sp, color = CyberTextSecondary, lineHeight = 16.sp)
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
+                    onClick = { viewModel.acceptTerms() },
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = CyberGold)
+                ) {
+                    Text("Accept & Continue", fontWeight = FontWeight.Bold, color = Color.Black, fontSize = 14.sp)
+                }
             }
         }
     }

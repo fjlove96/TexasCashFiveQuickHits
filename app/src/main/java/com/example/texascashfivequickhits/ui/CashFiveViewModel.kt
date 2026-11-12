@@ -66,6 +66,7 @@ data class CashFiveUiState(
     val showDailyDrawingsPage: Boolean = false,
     val showAddDrawDialog: Boolean = false,
     val showFavoritesDialog: Boolean = false,
+    val showTermsDialog: Boolean = false,
     val cloudSyncStatus: String = "Ready to sync with Cloudflare Worker"
 )
 
@@ -135,6 +136,7 @@ class CashFiveViewModel(application: Application) : AndroidViewModel(application
         val cMonth = cal.get(Calendar.MONTH) + 1
         val cYear = cal.get(Calendar.YEAR)
         val loadedTickets = loadSavedTickets(application)
+        checkTerms(application)
         _uiState.update { 
             it.copy(
                 currentCalendarMonth = cMonth, 
@@ -147,6 +149,20 @@ class CashFiveViewModel(application: Application) : AndroidViewModel(application
         loadData(application)
         checkDrawBreak()
         triggerCloudflareSync()
+    }
+
+    private fun checkTerms(context: android.content.Context) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE)
+        val accepted = prefs.getBoolean("key_terms_accepted", false)
+        if (!accepted) {
+            _uiState.update { it.copy(showTermsDialog = true) }
+        }
+    }
+
+    fun acceptTerms() {
+        val prefs = getApplication<Application>().getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE)
+        prefs.edit().putBoolean("key_terms_accepted", true).apply()
+        _uiState.update { it.copy(showTermsDialog = false) }
     }
 
     private fun loadData(context: android.content.Context) {
