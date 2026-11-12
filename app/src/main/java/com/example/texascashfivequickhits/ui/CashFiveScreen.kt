@@ -279,7 +279,6 @@ fun HomeTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
             ) {
                 Row(
                     modifier = Modifier.padding(18.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -297,13 +296,6 @@ fun HomeTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
                             Text("Pick numbers using 4-factor smart algorithm", fontSize = 12.sp, color = CyberTextSecondary)
                         }
                     }
-                    Text(
-                        text = "➔",
-                        color = CyberGold,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(end = 6.dp)
-                    )
                 }
             }
         }
@@ -318,7 +310,6 @@ fun HomeTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
             ) {
                 Row(
                     modifier = Modifier.padding(18.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -334,7 +325,6 @@ fun HomeTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
                             Text("${uiState.savedTickets.size} custom sets saved locally", fontSize = 12.sp, color = CyberTextSecondary)
                         }
                     }
-                    Text("➔", color = CyberGold, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
