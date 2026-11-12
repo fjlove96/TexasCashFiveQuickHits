@@ -1428,14 +1428,32 @@ fun AboutTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
                 colors = CardDefaults.cardColors(containerColor = CyberSurface)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Official Disclaimer", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = CyberGold)
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        "This app is an independent analysis tool and is not officially affiliated with, endorsed by, or connected to the Texas Lottery Commission. Winning numbers should always be verified through official Texas Lottery channels before discarding tickets.",
-                        fontSize = 12.sp,
-                        color = CyberTextSecondary,
-                        lineHeight = 16.sp
-                    )
+                    Text("Terms & Legal Disclaimer", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = CyberGold)
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text("1. For Entertainment & Informational Use Only", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = CyberCyan)
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text("Texas Cash Five Quick Hits is created solely for statistical exploration, educational, and entertainment purposes.", fontSize = 12.sp, color = CyberTextSecondary, lineHeight = 16.sp)
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("2. No Guarantee of Winnings or Results", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = CyberCyan)
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text("Historical draw frequency describes past drawings only; it does not predict future outcomes or alter the random odds of any lottery drawing. The app does not guarantee any winning ticket, prize, or financial return.", fontSize = 12.sp, color = CyberTextSecondary, lineHeight = 16.sp)
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("3. Limitation of Liability & Waiver", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = CyberCyan)
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text("You are solely responsible for any lottery purchases or financial decisions you make. The developers of Texas Cash Five Quick Hits assume no liability for any financial losses or claims arising from the use of this app or reliance on its data.", fontSize = 12.sp, color = CyberTextSecondary, lineHeight = 16.sp)
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("4. Unofficial & Non-Affiliated", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = CyberCyan)
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text("Texas Cash Five Quick Hits is an independent application and is not affiliated with, endorsed by, or sponsored by the Texas Lottery Commission or any official lottery organization.", fontSize = 12.sp, color = CyberTextSecondary, lineHeight = 16.sp)
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text("Data Source Attribution", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = CyberGold)
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text("Winning number results and historical drawing records are sourced from public data provided by the Texas Lottery Commission (www.texaslottery.com), retrieved on October 2026.", fontSize = 12.sp, color = CyberTextSecondary, lineHeight = 16.sp)
                 }
             }
         }
