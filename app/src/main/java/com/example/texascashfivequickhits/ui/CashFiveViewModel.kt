@@ -244,7 +244,7 @@ class CashFiveViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun updateDrawingsForMonthYear(month: Int, year: Int) {
-        val yearMonthDraws = HistoricalDrawRepository.getDrawsForYearAndMonth(allDraws, year, month).sortedBy { it.timeInMillis }
+        val yearMonthDraws = HistoricalDrawRepository.getDrawsForYearAndMonth(allDraws, year, month).sortedByDescending { it.timeInMillis }
         val hitsSoFarInYear = yearMonthDraws.flatMap { it.numbers }.distinct().sorted()
 
         _uiState.update {
