@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -886,11 +888,12 @@ fun PillBoxWinningNumbers(numbers: List<Int>, highlightNumber: Int = -1) {
             .clip(RoundedCornerShape(20.dp))
             .background(CyberBackground)
             .border(1.dp, CyberCyan.copy(alpha = 0.6f), RoundedCornerShape(20.dp))
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            .padding(horizontal = 8.dp, vertical = 6.dp),
         contentAlignment = Alignment.Center
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             for (num in numbers) {
@@ -905,7 +908,7 @@ fun PillBoxWinningNumbers(numbers: List<Int>, highlightNumber: Int = -1) {
 fun SmallHitBallHighlighted(number: String, isHighlighted: Boolean = false) {
     Box(
         modifier = Modifier
-            .size(34.dp)
+            .size(30.dp)
             .aspectRatio(1f)
             .clip(CircleShape)
             .background(if (isHighlighted) CyberGold else CyberGreen),
@@ -913,7 +916,7 @@ fun SmallHitBallHighlighted(number: String, isHighlighted: Boolean = false) {
     ) {
         Text(
             text = number,
-            fontSize = 12.sp,
+            fontSize = 11.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
         )
