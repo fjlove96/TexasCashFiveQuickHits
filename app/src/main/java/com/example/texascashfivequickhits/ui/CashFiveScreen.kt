@@ -297,7 +297,13 @@ fun HomeTab(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
                             Text("Pick numbers using 4-factor smart algorithm", fontSize = 12.sp, color = CyberTextSecondary)
                         }
                     }
-                    Text("➔", color = CyberGold, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "➔",
+                        color = CyberGold,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(end = 6.dp)
+                    )
                 }
             }
         }
