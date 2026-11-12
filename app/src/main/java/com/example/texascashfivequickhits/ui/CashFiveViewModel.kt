@@ -304,7 +304,7 @@ class CashFiveViewModel(application: Application) : AndroidViewModel(application
         _uiState.update { it.copy(showFavoritesDialog = false) }
     }
 
-    fun triggerCloudflareSync(workerUrl: String = "https://texas-cash-five-worker.workers.dev/cashfive.csv") {
+    fun triggerCloudflareSync(workerUrl: String = "https://crimson-water-8a64.restless-brook-5368.workers.dev/") {
         _uiState.update { it.copy(cloudSyncStatus = "Syncing latest drawings with Cloudflare Worker...") }
         HistoricalDrawRepository.syncWithCloudflareWorker(getApplication(), workerUrl) { success, message ->
             if (success) {
