@@ -42,6 +42,6 @@ jobs:
         env:
           WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
         run: |
-          curl -X POST "https://crimson-water-8a64.restless-brook-5368.workers.dev/" \
+          curl -f -X POST "https://crimson-water-8a64.restless-brook-5368.workers.dev/" \
                -H "X-Webhook-Secret: $WEBHOOK_SECRET" \
                --data-binary @cashfive.csv
