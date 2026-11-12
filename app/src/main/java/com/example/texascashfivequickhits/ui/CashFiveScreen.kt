@@ -70,17 +70,16 @@ fun CashFiveScreen(
                 title = {
                     Column {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Box(
+                            Image(
+                                painter = painterResource(id = com.example.texascashfivequickhits.R.drawable.app_logo_icon),
+                                contentDescription = "App Logo",
                                 modifier = Modifier
-                                    .size(26.dp)
+                                    .size(32.dp)
                                     .aspectRatio(1f)
-                                    .clip(CircleShape)
-                                    .background(CyberCyan),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text("TX", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                            }
-                            Spacer(modifier = Modifier.width(6.dp))
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
                             Text("TX CASH 5 SMART PICKS", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = CyberText, letterSpacing = 0.5.sp)
                         }
                         Text("Historical number analysis · Updated Nov 9, 2026", fontSize = 11.sp, color = CyberTextSecondary)
@@ -1235,8 +1234,6 @@ fun GeneratorPageModal(uiState: CashFiveUiState, viewModel: CashFiveViewModel) {
                                     colors = CardDefaults.cardColors(containerColor = CyberBackground)
                                 ) {
                                     Column(modifier = Modifier.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                                        Text("⭐ ${res.patternMatchScore}% Pattern Match Score", fontWeight = FontWeight.Bold, color = CyberGold, fontSize = 12.sp)
-                                        Spacer(modifier = Modifier.height(2.dp))
                                         Text(res.insightSummary, fontSize = 10.sp, color = CyberTextSecondary, textAlign = TextAlign.Center)
                                     }
                                 }
