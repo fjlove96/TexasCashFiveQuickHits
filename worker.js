@@ -1,13 +1,13 @@
 export default {
   async fetch(request, env, ctx) {
-    // POST endpoint to update CSV from GitHub Action
+    // POST endpoint: receives updated CSV from GitHub Action and saves to R2
     if (request.method === "POST") {
       const csvText = await request.text();
       await env.CASHFIVE_BUCKET.put("cashfive.csv", csvText);
-      return new Response("CSV successfully updated in R2!", { status: 200 });
+      return new Response("CSV updated successfully in R2", { status: 200 });
     }
 
-    // GET endpoint to serve CSV to the Android app
+    // GET endpoint: serves the CSV to the Android app
     try {
       const object = await env.CASHFIVE_BUCKET.get("cashfive.csv");
       if (object === null) {
